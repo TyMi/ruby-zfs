@@ -39,7 +39,7 @@ class ZFS
     @session_id = "#{username}@#{hostname}"
     @sessions ||= {}
 
-    @sessions[@session_id] ||= Net::SSH.start(@hostname,@user)
+    @sessions[@session_id] ||= Net::SSH.start(hostname, username)
   end
 
   # Create a new ZFS object (_not_ filesystem).
