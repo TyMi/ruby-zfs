@@ -429,7 +429,6 @@ class ZFS::Snapshot < ZFS
       raise AlreadyExists, "destination must not exist when receiving full stream"
     end
 
-    dest = dest.name if dest.is_a? ZFS
     incr_snap = incr_snap.name if incr_snap.is_a? ZFS
 
     send_opts = [ZFS.zfs_path].flatten + ['send']
@@ -440,7 +439,7 @@ class ZFS::Snapshot < ZFS
 
     receive_opts = [ZFS.zfs_path].flatten + ['receive']
     receive_opts << '-d' if opts[:use_sent_name]
-    receive_opts << dest
+    receive_opts << dest.name
 
     receiving_cmd_session = if dest.is_a? ZFS
       dest.cmd_session
