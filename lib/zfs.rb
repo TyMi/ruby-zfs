@@ -31,6 +31,17 @@ class ZFS
   class AlreadyExists < Exception; end
   class InvalidName < Exception; end
 
+  # Creates or returns an existing Net::SSH session.
+  # Ensures that not every ZFS instance has its own session.
+  def self.ssh_cmd_session(hostname, username)
+    require 'net-ssh-open3'
+
+    @session_id = "#{username}@#{hostname}"
+    @sessions ||= {}
+
+    @sessions[@session_id] ||= Net::SSH.start(@hostname,@user)
+  end
+
   # Create a new ZFS object (_not_ filesystem).
   def initialize(name, options={})
     @name, @pool, @path = name, *name.split('/', 2)
@@ -39,10 +50,8 @@ class ZFS
     @user = options[:user] || ENV['USER']
     @options = options
 
-
     if @hostname
-      require 'net-ssh-open3'
-      @cmd_session =  Net::SSH.start(@hostname,@user)
+      @cmd_session = ZFS.ssh_cmd_session(@hostname, @user)
     end
   end
 
