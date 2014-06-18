@@ -3,3 +3,4 @@
 .vagrant
 Gemfile.lock
 test.rb
+.idea/
