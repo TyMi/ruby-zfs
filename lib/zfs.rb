@@ -34,7 +34,7 @@ class ZFS
   # Create a new ZFS object (_not_ filesystem).
   def initialize(name, options={})
     @name, @pool, @path = name, *name.split('/', 2)
-    @cmd_session = @cmd_session
+    @cmd_session = Open3
     @hostname = options[:hostname]
 
     if @hostname
@@ -157,11 +157,11 @@ class ZFS
     attr_accessor :zfs_path
     attr_accessor :zpool_path
 
-    # Get an Array of all pools
+    # Get an Array of all local pools
     def pools
       cmd = [ZFS.zpool_path].flatten + %w(list -Honame)
 
-      stdout, stderr, status = @cmd_session.capture3(*cmd)
+      stdout, stderr, status = Open3.capture3(*cmd)
 
       if status.success? and stderr.empty?
         stdout.lines.collect do |pool|
@@ -172,11 +172,11 @@ class ZFS
       end
     end
 
-    # Get a Hash of all mountpoints and their filesystems
+    # Get a Hash of all local mountpoints and their filesystems
     def mounts
       cmd = [ZFS.zfs_path].flatten + %w(get -rHp -oname,value mountpoint)
 
-      stdout, stderr, status = @cmd_session.capture3(*cmd)
+      stdout, stderr, status = Open3.capture3(*cmd)
 
       if status.success? and stderr.empty?
         mounts = stdout.lines.collect do |line|
