@@ -65,7 +65,7 @@ ZFS is mutable, and contains potentially very destructive methods.
 	Still missing inherit, mount/unmount, share/unshare, and maybe send/receive
 
 	# Shell out to `ssh`, and assume `zfs` and `zpool` is in path on remote host
-	ZFS('tank/foo', hostname: 'foo.example.com')
+	ZFS('tank/foo', hostname: 'foo.example.com', user: 'foo')
 
 	# Can be set to either a String or an Array
 	ZFS.zfs_path                # => '/sbin/zfs'

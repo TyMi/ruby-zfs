@@ -11,9 +11,9 @@ def ZFS(path, options={})
   if path.match(/^\//)
     ZFS.mounts[path]
   elsif path.match('@')
-    ZFS::Snapshot.new(path, hostname: options[:hostname])
+    ZFS::Snapshot.new(path, options)
   else
-    ZFS::Filesystem.new(path, hostname: options[:hostname])
+    ZFS::Filesystem.new(path, options)
   end
 end
 
@@ -36,10 +36,11 @@ class ZFS
     @name, @pool, @path = name, *name.split('/', 2)
     @cmd_session = Open3
     @hostname = options[:hostname]
+    @user = options[:user] || ENV['USER']
 
     if @hostname
       require 'net-ssh-open3'
-      @cmd_session =  Net::SSH.start(@hostname)
+      @cmd_session =  Net::SSH.start(@hostname,@user)
     end
   end
 
