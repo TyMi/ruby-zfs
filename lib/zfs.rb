@@ -37,6 +37,8 @@ class ZFS
     @cmd_session = Open3
     @hostname = options[:hostname]
     @user = options[:user] || ENV['USER']
+    @options = options
+
 
     if @hostname
       require 'net-ssh-open3'
@@ -345,7 +347,7 @@ class ZFS::Snapshot < ZFS
 
   # Just remove the snapshot-name
   def parent
-    ZFS(name.sub(/@.+/, ''), hostname: @hostname, user: @user)
+    ZFS(name.sub(/@.+/, ''), @options)
   end
 
   # Rename snapshot
@@ -509,7 +511,7 @@ class ZFS::Filesystem < ZFS
 
     if status.success? and stderr.empty?
       stdout.lines.collect do |snap|
-        ZFS(snap.chomp)
+        ZFS(snap.chomp, @options)
       end
     else
       raise Exception, "something went wrong"
