@@ -416,13 +416,13 @@ class ZFS::Snapshot < ZFS
     dest = dest.name if dest.is_a? ZFS
     incr_snap = incr_snap.name if incr_snap.is_a? ZFS
 
-    send_opts = ZFS.zfs_path.flatten + ['send']
+    send_opts = [ZFS.zfs_path].flatten + ['send']
     send_opts.concat ['-i', incr_snap] if opts[:incremental]
     send_opts.concat ['-I', incr_snap] if opts[:intermediary]
     send_opts << '-R' if opts[:replication]
     send_opts << name
 
-    receive_opts = ZFS.zfs_path.flatten + ['receive']
+    receive_opts = [ZFS.zfs_path].flatten + ['receive']
     receive_opts << '-d' if opts[:use_sent_name]
     receive_opts << dest
 
