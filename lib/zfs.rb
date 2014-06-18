@@ -77,12 +77,8 @@ class ZFS
     cmd = [ZFS.zfs_path].flatten + %w(list -H -oname) + [name]
 
     out, status = @cmd_session.capture2e(*cmd)
-    if status.success? and out == "#{name}\n"
-      true
-    else
-      false
-    end
-  end
+    status.success? and out == "#{name}\n"
+   end
 
   # Create filesystem
   def create(opts={})
@@ -331,6 +327,15 @@ end
 
 
 class ZFS::Snapshot < ZFS
+
+  # Does the filesystem exist?
+  def exist?
+    cmd = [ZFS.zfs_path].flatten + %w(list -H -oname -tsnapshot) + [name]
+
+    out, status = @cmd_session.capture2e(*cmd)
+    status.success? and out == "#{name}\n"
+  end
+
   # Return sub-filesystem
   def +(path)
     raise InvalidName if path.match(/@/)
