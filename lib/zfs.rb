@@ -345,7 +345,7 @@ class ZFS::Snapshot < ZFS
 
   # Just remove the snapshot-name
   def parent
-    ZFS(name.sub(/@.+/, ''))
+    ZFS(name.sub(/@.+/, ''), hostname: @hostname, user: @user)
   end
 
   # Rename snapshot
