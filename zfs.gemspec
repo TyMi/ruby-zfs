@@ -4,9 +4,9 @@ require 'rake'
 
 Gem::Specification.new do |s|
 	s.name        = "zfs"
-	s.version     = "0.1.1"
+	s.version     = "0.2.0"
 	s.platform    = Gem::Platform::RUBY
-	s.authors     = %w(kvs)
+	s.authors     = %w(kvs iaddict)
 	s.email       = %w(kvs@binarysolutions.dk)
 	s.homepage    = "https://github.com/kvs/ruby-zfs"
 	s.summary     = "An library for interacting with ZFS"
