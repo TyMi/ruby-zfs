@@ -442,6 +442,7 @@ class ZFS::Snapshot < ZFS
     receive_opts = []
     receive_opts << 'gunzip |' if opts[:use_compression]
     receive_opts << [ZFS.zfs_path].flatten + ['receive']
+    receive_opts << ['-F'] if opts[:force]
     receive_opts << '-d' if opts[:use_sent_name]
     receive_opts << dest.name
 
