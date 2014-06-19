@@ -436,8 +436,12 @@ class ZFS::Snapshot < ZFS
     send_opts.concat ['-I', incr_snap] if opts[:intermediary]
     send_opts << '-R' if opts[:replication]
     send_opts << name
+    send_opts << '| gzip' if opts[:use_compression]
 
-    receive_opts = [ZFS.zfs_path].flatten + ['receive']
+
+    receive_opts = []
+    receive_opts << 'gunzip |' if opts[:use_compression]
+    receive_opts << [ZFS.zfs_path].flatten + ['receive']
     receive_opts << '-d' if opts[:use_sent_name]
     receive_opts << dest.name
 
@@ -448,8 +452,8 @@ class ZFS::Snapshot < ZFS
     end
 
 
-    receiving_cmd_session.popen3(*receive_opts) do |rstdin, rstdout, rstderr, rthr|
-      @cmd_session.popen3(*send_opts) do |sstdin, sstdout, sstderr, sthr|
+    receiving_cmd_session.popen3(receive_opts.join(' ')) do |rstdin, rstdout, rstderr, rthr|
+      @cmd_session.popen3(send_opts.join(' ')) do |sstdin, sstdout, sstderr, sthr|
         while !sstdout.eof?
           rstdin.write(sstdout.read(16384))
         end

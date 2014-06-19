@@ -61,6 +61,7 @@ ZFS is mutable, and contains potentially very destructive methods.
 	fs2.rename('tank/baz')
 
 	snapshot.send_to(fs)        # ZFS send/receive rolled into one - needs long description
+	    use_compression: true   # to use gzip compression for transfer
 
 	Still missing inherit, mount/unmount, share/unshare, and maybe send/receive
 
