@@ -459,6 +459,7 @@ class ZFS::Snapshot < ZFS
           rstdin.write(sstdout.read(16384))
         end
         raise "stink" unless sstderr.read == ''
+        rstdin.close
       end
     end
   end
