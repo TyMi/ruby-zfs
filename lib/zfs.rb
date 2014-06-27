@@ -359,6 +359,11 @@ class ZFS::Snapshot < ZFS
     ZFS(name.sub(/@.+/, ''), @options)
   end
 
+  # Return only Snapshot name (without path)
+  def snapshot_name
+    name.sub(/^[^@]+/, '')
+  end
+
   # Rename snapshot
   def rename!(newname, opts={})
     raise AlreadyExists if (parent + "@#{newname}").exist?
